@@ -8,18 +8,18 @@ import java.util.List;
 
 import javax.swing.JComponent;
 
-import com.phoenixkahlo.utils.DoubleFunction;
+import com.phoenixkahlo.utils.Function;
 
-public class FunctionPanel extends JComponent {
+public class FunctionGraph extends JComponent {
 	
 	private static final long serialVersionUID = 9051380125134841689L;
 
 	private class FunctionDrawer {
 		
-		DoubleFunction function;
+		Function function;
 		Color color;
 		
-		FunctionDrawer(DoubleFunction function, Color color) {
+		FunctionDrawer(Function function, Color color) {
 			this.function = function;
 			this.color = color;
 		}
@@ -37,13 +37,13 @@ public class FunctionPanel extends JComponent {
 					}
 				}
 			} else {
-				for (int pixelsY = getHeight() - 1; pixelsY >= 0; pixelsY--) {
+				for (int pixelsY = 0; pixelsY < getHeight(); pixelsY++) {
 					double unitsX1 = yPixelsToXUnits(pixelsY);
-					double unitsX2 = yPixelsToXUnits(pixelsY - 1);
+					double unitsX2 = yPixelsToXUnits(pixelsY + 1);
 					if (function.inDomain(unitsX1) && function.inDomain(unitsX2)) {
-						int pixelsX1 = xUnitsToYPixels(function.invoke(unitsX1));
-						int pixelsX2 = xUnitsToYPixels(function.invoke(unitsX2));
-						graphics.drawLine(pixelsX1, pixelsY, pixelsX2, pixelsY - 1);
+						int pixelsX1 = yUnitsToXPixels(function.invoke(unitsX1));
+						int pixelsX2 = yUnitsToXPixels(function.invoke(unitsX2));
+						graphics.drawLine(pixelsX1, pixelsY, pixelsX2, pixelsY + 1);
 					}
 				}
 			}
@@ -58,6 +58,7 @@ public class FunctionPanel extends JComponent {
 	/*
 	 * x to x and y to y conversions are only for if horizontalX
 	 */
+	//TODO: recreate to not use flippixelsvertically
 	private double xPixelsToUnits(int pixelsX) {
 		if (horizontalX) {
 			return pixelsX * (xMax - xMin) / getWidth() + xMin;
@@ -95,6 +96,32 @@ public class FunctionPanel extends JComponent {
 	/*
 	 * x to y and y to x conversions are only for if not horizontalX
 	 */
+	
+	private double yPixelsToXUnits(int pixelsY) {
+		if (!horizontalX) {
+			return (double) pixelsY * (xMax - xMin) / getHeight() + xMin;
+		} else {
+			throw new RuntimeException();
+		}
+	}
+	
+	@SuppressWarnings("unused")
+	private int xUnitsToYPixels(double unitsX) {
+		if (!horizontalX) {
+			return (int) ((unitsX - xMin) * getHeight() / (xMax - xMin));
+		} else {
+			throw new RuntimeException();
+		}
+	}
+	
+	private int yUnitsToXPixels(double unitsY) {
+		if (!horizontalX) {
+			return (int) ((unitsY - yMin) * getWidth() / (yMax - yMin));
+		} else {
+			throw new RuntimeException();
+		}
+	}
+	/*
 	@SuppressWarnings("unused")
 	private double xPixelsToYUnits(int pixelsX) {
 		if (!horizontalX) {
@@ -128,16 +155,36 @@ public class FunctionPanel extends JComponent {
 			throw new RuntimeException();
 		}
 	}
-	
+	*/
 	private List<FunctionDrawer> functions = new ArrayList<FunctionDrawer>();
 	private Dimension preferredSize;
-	private int xMin;
-	private int xMax;
-	private int yMin;
-	private int yMax;
+	private double xMin;
+	private double xMax;
+	private double yMin;
+	private double yMax;
 	private boolean horizontalX;
 	
-	public FunctionPanel(int width, int height, int xMin, int xMax, int yMin, int yMax, boolean horizontalX) {
+	public double getXMin() {
+		return xMin;
+	}
+	
+	public double getXMax() {
+		return xMax;
+	}
+	
+	public double getYMin() {
+		return yMin;
+	}
+	
+	public double getYMax() {
+		return yMax;
+	}
+	
+	public Function getFunction(int i) {
+		return functions.get(i).function;
+	}
+	
+	public FunctionGraph(int width, int height, double xMin, double xMax, double yMin, double yMax, boolean horizontalX) {
 		this.preferredSize = new Dimension(width, height);
 		this.xMin = xMin;
 		this.xMax = xMax;
@@ -156,7 +203,7 @@ public class FunctionPanel extends JComponent {
 		}
 	}
 	
-	public void addFunction(DoubleFunction function, Color color) {
+	public void addFunction(Function function, Color color) {
 		functions.add(new FunctionDrawer(function, color));
 		repaint();
 	}

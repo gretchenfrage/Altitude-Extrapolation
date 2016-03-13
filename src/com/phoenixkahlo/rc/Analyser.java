@@ -3,19 +3,59 @@ package com.phoenixkahlo.rc;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.Map;
 
 import javax.imageio.ImageIO;
-import javax.swing.JPanel;
 
-import com.phoenixkahlo.swingutils.FlowFrame;
-import com.phoenixkahlo.swingutils.FunctionPanel;
-import com.phoenixkahlo.swingutils.SizeLimitedImagePanel;
-import com.phoenixkahlo.swingutils.VerticallyFloatingLayout;
-import com.phoenixkahlo.utils.DoubleFunction;
+import com.phoenixkahlo.swingutils.BasicFrame;
 
 public class Analyser {
-	
+		
+		public static void main(String[] args) throws IOException {
+			/*
+			Map<Integer, Double> map = new HashMap<Integer, Double>();
+			for (int i = 50; i <= 100; i++) {
+				map.put(i, Math.sin((double) i / 3) * 50 + 100);
+			}
+			Function function = new Function() {
+				@Override
+				public double invoke(double x) {
+					return map.get((int) x);
+				}
+				@Override
+				public boolean inDomain(double x) {
+					return map.containsKey((int) x);
+				}
+			};
+			for (double i = 50; i <= 100; i++) {
+				System.out.println("f(" + i + ")=" + function.invoke(i));
+			}
+			FunctionGraph graph = new FunctionGraph(500, 500, 0, 500, 0, function.highestY(0, 500, 1), false);
+			graph.addFunction(function, Color.RED);
+			BasicFrame frame = new BasicFrame();
+			frame.add(graph);
+			frame.display();
+			*/
+			
+			BufferedImage bottom = ImageIO.read(new File("bottom.jpeg"));
+			BufferedImage top = ImageIO.read(new File("top.jpeg"));
+			Map<Integer, Double> map = new HashMap<Integer, Double>();
+			for (int i = 50; i <= 100; i++) {
+				map.put(i, Math.sin((double) i / 50) * 50 + 100);
+			}
+			
+			for (Map.Entry<Integer, Double> entry : map.entrySet()) {
+				System.out.println("f(" + entry.getKey() + ")=" + entry.getValue());
+			}
+			AnalysisVisualizer visualizer = new AnalysisVisualizer(bottom, top, map);
+			BasicFrame frame = new BasicFrame();
+			frame.add(visualizer);
+			frame.setResizable(false);
+			frame.display();
+			
+		}
+	/*
 	public static void main(String[] args) throws IOException {
 		BufferedImage bottom = ImageIO.read(new File("bottom.jpeg"));
 		BufferedImage top = ImageIO.read(new File("top.jpeg"));
@@ -50,7 +90,7 @@ public class Analyser {
 				(int) (350 + i1.getPreferredSize().getHeight() / 2), 0, Integer.MAX_VALUE, false);
 		
 		frame.display();
-
+/*
 	/*
 	private BufferedImage bottom; // Not shifted
 	private BufferedImage top; // Shifted

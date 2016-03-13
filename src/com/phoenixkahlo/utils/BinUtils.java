@@ -57,4 +57,16 @@ public class BinUtils {
     	return new String(bytes, StandardCharsets.UTF_8);
     }
 	
+	public static void writeString(OutputStream out, String string) throws IOException {
+		byte[] bytes = stringToBytes(string);
+		writeInt(out, bytes.length);
+		out.write(bytes);
+	}
+	
+	public static String readString(InputStream in) throws IOException {
+		byte[] bytes = new byte[readInt(in)];
+		in.read(bytes);
+		return bytesToString(bytes);
+	}
+	
 }

@@ -3,35 +3,37 @@ package com.phoenixkahlo.rc;
 import java.awt.Color;
 
 import com.phoenixkahlo.swingutils.BasicFrame;
-import com.phoenixkahlo.swingutils.FunctionPanel;
-import com.phoenixkahlo.utils.AllDomainDoubleFunction;
+import com.phoenixkahlo.swingutils.FunctionGraph;
+import com.phoenixkahlo.utils.Function;
 
-class IndentityFunction extends AllDomainDoubleFunction {
-	@Override
-	public double invoke(double x) {
-		return x;
-	}
-}
 
-class SineFunction extends AllDomainDoubleFunction {
-	@Override
-	public double invoke(double x) {
-		return Math.sin(x / 50) * 50 + 250;
-	}
-}
-
-class Parabola extends AllDomainDoubleFunction {
-	@Override
-	public double invoke(double x) {
-		return Math.pow(x - 250, 2) / 10;
-	}
-}
 
 public class SwingTester {
 	
+	public static class IndentityFunction extends Function {
+		@Override
+		public double invoke(double x) {
+			return x;
+		}
+	}
+
+	public static class SineFunction extends Function {
+		@Override
+		public double invoke(double x) {
+			return Math.sin(x / 50) * 50 + 250;
+		}
+	}
+
+	public static class Parabola extends Function {
+		@Override
+		public double invoke(double x) {
+			return Math.pow(x, 2) / 400;
+		}
+	}
+	
 	public static void main(String[] args) {
 		BasicFrame frame = new BasicFrame();
-		FunctionPanel panel = new FunctionPanel(1000, 500, 0, 500, 0, 500, false);
+		FunctionGraph panel = new FunctionGraph(1000, 500, 0, 500, 0, 500, false);
 		frame.add(panel);
 		frame.display();
 		panel.addFunction(new IndentityFunction(), Color.RED);

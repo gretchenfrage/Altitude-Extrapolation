@@ -7,20 +7,20 @@ import java.io.IOException;
 
 import com.phoenixkahlo.utils.IntCallback;
 
-public class SizeLimitedImagePanel extends ImagePanel {
+public class SizeLimitedSwingImage extends SwingImage {
 
 	private static final long serialVersionUID = -6872488998230466834L;
 	
 	private IntCallback widthLimiter;
 	private IntCallback heightLimiter;
 	
-	public SizeLimitedImagePanel(File image, IntCallback widthLimiter, IntCallback heightLimiter) throws IOException {
+	public SizeLimitedSwingImage(File image, IntCallback widthLimiter, IntCallback heightLimiter) throws IOException {
 		super(image);
 		this.widthLimiter = widthLimiter;
 		this.heightLimiter = heightLimiter;
 	}
 	
-	public SizeLimitedImagePanel(BufferedImage image, IntCallback widthLimiter, IntCallback heightLimiter) throws IOException {
+	public SizeLimitedSwingImage(BufferedImage image, IntCallback widthLimiter, IntCallback heightLimiter) throws IOException {
 		super(image);
 		this.widthLimiter = widthLimiter;
 		this.heightLimiter = heightLimiter;

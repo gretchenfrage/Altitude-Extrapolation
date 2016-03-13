@@ -8,19 +8,19 @@ import java.io.File;
 import java.io.IOException;
 
 import javax.imageio.ImageIO;
-import javax.swing.JPanel;
+import javax.swing.JComponent;
 
-public class ImagePanel extends JPanel {
+public class SwingImage extends JComponent {
 
 	private static final long serialVersionUID = -7641525774844957585L;
 
 	private BufferedImage image;
 
-	public ImagePanel(File image) throws IOException {
+	public SwingImage(File image) throws IOException {
 		this.image = ImageIO.read(image);
 	}
 	
-	public ImagePanel(BufferedImage image) throws IOException {
+	public SwingImage(BufferedImage image) throws IOException {
 		this.image = image;
 	}
 	
