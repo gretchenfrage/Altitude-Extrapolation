@@ -2,6 +2,7 @@ package com.phoenixkahlo.swingutils;
 
 import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.FontMetrics;
 import java.awt.Graphics;
 import java.util.ArrayList;
 import java.util.List;
@@ -59,7 +60,7 @@ public class FunctionGraph extends JComponent {
 	 * x to x and y to y conversions are only for if horizontalX
 	 */
 	//TODO: recreate to not use flippixelsvertically
-	private double xPixelsToUnits(int pixelsX) {
+	public double xPixelsToUnits(int pixelsX) {
 		if (horizontalX) {
 			return pixelsX * (xMax - xMin) / getWidth() + xMin;
 		} else {
@@ -67,8 +68,7 @@ public class FunctionGraph extends JComponent {
 		}
 	}
 	
-	@SuppressWarnings("unused")
-	private double yPixelsToUnits(int pixelsY) {
+	public double yPixelsToUnits(int pixelsY) {
 		if (horizontalX) {
 			return flipPixelsVertical(pixelsY) * (yMax - yMin) / getHeight() + yMin;
 		} else {
@@ -76,8 +76,7 @@ public class FunctionGraph extends JComponent {
 		}
 	}
 	
-	@SuppressWarnings("unused")
-	private int xUnitsToPixels(double unitsX) {
+	public int xUnitsToPixels(double unitsX) {
 		if (horizontalX) {
 			return (int) ((unitsX - xMin) * getWidth() / (xMax - xMin));
 		} else {
@@ -85,7 +84,7 @@ public class FunctionGraph extends JComponent {
 		}
 	}
 	
-	private int yUnitsToPixels(double unitsY) {
+	public int yUnitsToPixels(double unitsY) {
 		if (horizontalX) {
 			return flipPixelsVertical((int) ((unitsY - yMin) * getHeight() / (yMax - yMin)));
 		} else {
@@ -97,7 +96,7 @@ public class FunctionGraph extends JComponent {
 	 * x to y and y to x conversions are only for if not horizontalX
 	 */
 	
-	private double yPixelsToXUnits(int pixelsY) {
+	public double yPixelsToXUnits(int pixelsY) {
 		if (!horizontalX) {
 			return (double) pixelsY * (xMax - xMin) / getHeight() + xMin;
 		} else {
@@ -105,8 +104,7 @@ public class FunctionGraph extends JComponent {
 		}
 	}
 	
-	@SuppressWarnings("unused")
-	private int xUnitsToYPixels(double unitsX) {
+	public int xUnitsToYPixels(double unitsX) {
 		if (!horizontalX) {
 			return (int) ((unitsX - xMin) * getHeight() / (xMax - xMin));
 		} else {
@@ -114,7 +112,7 @@ public class FunctionGraph extends JComponent {
 		}
 	}
 	
-	private int yUnitsToXPixels(double unitsY) {
+	public int yUnitsToXPixels(double unitsY) {
 		if (!horizontalX) {
 			return (int) ((unitsY - yMin) * getWidth() / (yMax - yMin));
 		} else {
@@ -197,10 +195,33 @@ public class FunctionGraph extends JComponent {
 	public void paintComponent(Graphics graphics) {
 		graphics.setColor(Color.WHITE);
 		graphics.fillRect(0, 0, getWidth(), getHeight());
-		//TODO: draw axes, units
+
 		for (FunctionDrawer function : functions) {
 			function.paint(graphics);
 		}
+		
+		graphics.setColor(Color.BLACK);
+		String ul, ur, ll, lr;
+		if (horizontalX) {
+			ul = "(" + (int) xMin + ", " + (int) yMax + ")";
+			ur = "(" + (int) xMax + ", " + (int) yMax + ")";
+			ll = "(" + (int) xMin + ", " + (int) yMin + ")";
+			lr = "(" + (int) xMax + ", " + (int) yMin + ")";
+		} else {
+			ul = "(" + (int) xMin + ", " + (int) yMin + ")";
+			ur = "(" + (int) xMin + ", " + (int) yMax + ")";
+			ll = "(" + (int) xMax + ", " + (int) yMin + ")";
+			lr = "(" + (int) xMax + ", " + (int) yMax + ")";
+		}
+		int pt = graphics.getFont().getSize();
+		FontMetrics metrics = graphics.getFontMetrics();
+		int padding = 4;
+		graphics.drawString(ul, padding, pt + padding);
+		graphics.drawString(ur, getWidth() - metrics.stringWidth(ur) - padding, pt + padding);
+		graphics.drawString(ll, padding, getHeight() - padding);
+		graphics.drawString(lr, getWidth() - metrics.stringWidth(lr) - padding, getHeight() - padding);
+		
+		graphics.drawRect(0, 0, getWidth() - 1, getHeight() - 1);
 	}
 	
 	public void addFunction(Function function, Color color) {

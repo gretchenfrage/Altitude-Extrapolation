@@ -13,7 +13,7 @@ public abstract class Function {
 	
 	public double xOfLowestY(double xMin, double xMax, double step) {
 		double xOfLowestY = Double.NaN;
-		double lowestY = 0;
+		double lowestY = Double.MAX_VALUE;
 		for (double x = xMin; x <= xMax; x += step) {
 			if (inDomain(x) && invoke(x) < lowestY) {
 				xOfLowestY = x;
@@ -25,7 +25,7 @@ public abstract class Function {
 	
 	public double xOfHighestY(double xMin, double xMax, double step) {
 		double xOfHighestY = Double.NaN;
-		double highestY = 0;
+		double highestY = -Double.MAX_VALUE;
 		for (double x = xMin; x <= xMax; x += step) {
 			if (inDomain(x) && invoke(x) > highestY) {
 				xOfHighestY = x;
@@ -41,6 +41,20 @@ public abstract class Function {
 	
 	public double highestY(double xMin, double xMax, double step) {
 		return invoke(xOfHighestY(xMin, xMax, step));
+	}
+	
+	public double lowestX(double xMin, double xMax, double step) {
+		for (double x = xMin; x <= xMax; x += step) {
+			if (inDomain(x)) return x;
+		}
+		return Double.NaN;
+	}
+	
+	public double highestX(double xMin, double xMax, double step) {
+		for (double x = xMax; x >= xMin; x -= step) {
+			if (inDomain(x)) return x;
+		}
+		return Double.NaN;
 	}
 	
 }

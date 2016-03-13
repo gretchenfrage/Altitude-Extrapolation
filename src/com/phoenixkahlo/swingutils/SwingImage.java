@@ -47,7 +47,7 @@ public class SwingImage extends JComponent {
         }
     }
 	
-	protected BufferedImage getImage() {
+	public BufferedImage getImage() {
 		return image;
 	}
 	
